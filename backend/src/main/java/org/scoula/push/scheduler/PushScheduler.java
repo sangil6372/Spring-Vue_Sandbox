@@ -1,35 +1,32 @@
-package org.scoula.push;
+package org.scoula.push.scheduler;
 
+import org.scoula.push.entity.Subscription;
+import org.scoula.push.service.PushNotificationService;
+import org.scoula.push.service.SubscriptionService;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-
-import java.util.ArrayList;
 import java.util.List;
 
 @Component
 public class PushScheduler {
 
+    private final SubscriptionService service;
     private final PushNotificationService pushService;
 
-    public PushScheduler(PushNotificationService pushService) {
+    public PushScheduler(SubscriptionService service, PushNotificationService pushService) {
+        this.service = service;
         this.pushService = pushService;
     }
 
-    // 매 30초마다 실행 (테스트용)
-    @Scheduled(fixedRate = 30000)
-    public void testPushNotifications() {
-        System.out.println("== Push 테스트 스케줄러 실행 ==");
-
-        // 가짜 DB에서 사용자 구독 정보 꺼내온다고 가정
-        List<SubscriptionInfo> subs = new ArrayList<>();
-
-        SubscriptionInfo dummy = new SubscriptionInfo();
-        dummy.setEndpoint("https://fcm.googleapis.com/fcm/send/...");
-        dummy.setP256dh("...");
-        dummy.setAuth("...");
-        subs.add(dummy);
-
-        // 가짜 List<알림>을 돌면서 전송
-        pushService.sendPushToSubscriptions(subs);
+    @Scheduled(cron = "0/10 * * * * *") // 1초마다
+    public void sendScheduledPush() {
+        List<Subscription> subs = service.findAll();
+        for (Subscription s : subs) {
+            try {
+                pushService.sendPush(s, "스케줄 알림", "DB에서 꺼내 10초마다 보내는 알림!");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
