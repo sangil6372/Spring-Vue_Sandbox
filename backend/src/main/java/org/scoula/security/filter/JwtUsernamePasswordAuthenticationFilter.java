@@ -18,6 +18,12 @@ import javax.servlet.http.HttpServletResponse;
 @Component
 public class JwtUsernamePasswordAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
+    // AuthenticationManager를 setter로 주입받음
+    @Override
+    public void setAuthenticationManager(AuthenticationManager authenticationManager) {
+        super.setAuthenticationManager(authenticationManager);
+    }
+
     // 필터 생성자
     public JwtUsernamePasswordAuthenticationFilter(
             AuthenticationManager authenticationManager,    // SecurityConfig 생성 후 Bean 등록
