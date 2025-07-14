@@ -4,6 +4,7 @@ import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.session.SqlSessionFactory;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +15,10 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 import javax.sql.DataSource;
+import java.security.Security;
 
 /**
  * 🌱 Root Application Context 설정 클래스
@@ -28,13 +31,18 @@ import javax.sql.DataSource;
 @MapperScan(basePackages = {
         "org.scoula.board.mapper",
         "org.scoula.member.mapper",  // 회원 매퍼 스캔
-        "org.scoula.travel.mapper"   // 여행지 매퍼 스캔
+        "org.scoula.travel.mapper",
+        "org.scoula.push.mapper"
 })
 @ComponentScan(basePackages = {
         "org.scoula.board.service",
         "org.scoula.member.service",  // 회원 서비스 스캔
-        "org.scoula.travel.service"   // 여행지 서비스 스캔
+        "org.scoula.travel.service",   // 여행지 서비스 스캔
+        "org.scoula.push.service",
+        "org.scoula.push.scheduler",
+        "org.scoula.push.config"
 })
+@EnableScheduling
 public class RootConfig {
 
     // 현재는 기본 설정만 있는 상태
@@ -114,5 +122,10 @@ public class RootConfig {
         DataSourceTransactionManager manager = new DataSourceTransactionManager(dataSource());
         return manager;
     }
+
+    @Autowired
+    ApplicationContext context;
+
+
 
 }
