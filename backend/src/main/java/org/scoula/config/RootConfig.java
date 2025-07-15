@@ -40,7 +40,8 @@ import java.security.Security;
         "org.scoula.travel.service",   // 여행지 서비스 스캔
         "org.scoula.push.service",
         "org.scoula.push.scheduler",
-        "org.scoula.push.config"
+        "org.scoula.push.config",
+        "org.scoula.codef"
 })
 @EnableScheduling
 public class RootConfig {
