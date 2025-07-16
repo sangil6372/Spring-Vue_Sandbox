@@ -36,9 +36,9 @@ public class CodefApiRequester {
      */
     public String connectAndGetConnectedId() {
         try {
-            String bankLoginId = "sangil6372";
-            String bankPassword = "p13639475!";
-            String organization = "0004";
+            String bankLoginId = "<은행 아이디>";
+            String bankPassword = "<은행 비번>";
+            String organization = "0004"; // 국민 은행 코드
 
             String encPwd = RSAUtil.encryptRSA(bankPassword, publicKey);
 
